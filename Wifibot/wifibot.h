@@ -28,7 +28,7 @@ public:
 	void rotate(int direction);
 	void connect(std::string ip);
 	void disconnect();
-	double getBattery();
+	unsigned char getBattery();
 	
 
 
