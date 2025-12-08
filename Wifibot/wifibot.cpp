@@ -167,7 +167,7 @@ void Wifibot::disconnect(){
 
 }
 
-unsigned Wifibot::getBattery(){
+unsigned char Wifibot::getBattery(){
 	unsigned char volts = data_robot[2];
 	cout<< "Niveau batterie"<<volts<<endl;
 	return volts;
