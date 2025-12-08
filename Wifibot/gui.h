@@ -37,6 +37,7 @@ private:
 public:
 	Gui();
 	~Gui();
+	void update_bat_label(int battery);
 	bool time_out();
 
 

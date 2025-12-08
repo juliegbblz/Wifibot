@@ -126,15 +126,15 @@ Gui::Gui():
 
 }
 
+void Gui::update_bat_label(int battery){
+	std::string texte_batterie = std::to_string(battery) + " %";
+    m_entree_batterie.set_text(texte_batterie);
+}
+
 bool Gui::time_out()
 {
-    // Appel direct de la méthode de wifibot/robot
-    int niveau_batterie = m_robot.getBattery();
-    
-    // Affichage avec format %
-    std::string texte_batterie = std::to_string(niveau_batterie) + " %";
-    m_entree_batterie.set_text(texte_batterie);  // ou m_label_batterie.set_text()
-    
+    int bat = m_robot.getBattery();
+    update_bat_label(bat);    
     return true;  // Continue le timeout toutes les 400ms
 }
 

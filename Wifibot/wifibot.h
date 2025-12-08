@@ -4,7 +4,7 @@
 #include "socket.h"
 
 #define LOOP_TIME 200
-#define PORT 15020
+#define PORT 15020 //adresse ip 192.168.1.106
 
 class Wifibot {
 private:

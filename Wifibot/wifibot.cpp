@@ -83,7 +83,7 @@ void Wifibot::run(){
 	static int cpt;
 	short crc;
 	while (m_stop==false) {
-		cout << "Thread [send] : " << ++cpt << endl;
+		//cout << "Thread [send] : " << ++cpt << endl;
 		bool speed_ctr=m_order.get_speed_ctr();
 		bool sens_right=((m_order.get_order_R() >=0) ? true :false);
 		short speed_right=abs(m_order.get_order_R());
@@ -116,15 +116,36 @@ void Wifibot::run(){
 	cout << "Thread [send] : stop !" << endl << endl;
 }	
 
+
 void Wifibot::receive(){
 	char sbuf[21];
-	m_socket.receive(sbuf,21);
-	short crc_calc = crc16(trame_crc, 19);
-    short crc_recv = (sbuf[20] << 8) | sbuf[19];
-        if (crc_calc == crc_recv) {
-			memcpy(data_robot,sbuf,21);
+	short crc_calc,crc_recv;
+	while (!m_stop) {
+		m_socket.receive(sbuf,21);
+		crc_calc = crc16((unsigned char*)sbuf, 19);
+		crc_recv = (sbuf[20] << 8) | sbuf[19];
+		if (crc_calc == crc_recv) {
+			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
+			if (speed_left > 32767) speed_left-=65536;
+			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
+			if (speed_right > 32767) speed_right-=65536;
+			unsigned char battery =(unsigned char)sbuf[2];
+			unsigned char ir_left =(unsigned char)sbuf[3];
+			unsigned char ir_right =(unsigned char)sbuf[4];
+			long odometry_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8);
+			long odometry_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8);
+			unsigned char current =(unsigned char)sbuf[17];
+			unsigned char firmware_ver =(unsigned char)sbuf[18];
 		}
+		else{
+			cout<<"CRC invalide";
+		}
+	}
+	
+		this_thread::sleep_for(std::chrono::milliseconds(LOOP_TIME));
+		cout << "Thread [received] : stop !" << endl << endl;
 }
+
 
 void Wifibot::connect(string ip){
 	m_socket.open(ip,PORT);
@@ -134,6 +155,7 @@ void Wifibot::connect(string ip){
 		m_p_thread_recv=new thread([this](){this->receive();});
 	}
 }
+
 
 void Wifibot::disconnect(){
 	m_stop=true;
