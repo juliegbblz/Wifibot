@@ -137,9 +137,7 @@ void Wifibot::receive(){
 			long odometry_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
-			cout<<"battery"<<battery;
 			memcpy(data_robot, sbuf, 21);
-			cout<<"battery data_robot"<<data_robot[2];
 		}
 		else{
 			cout<<"CRC invalide";
