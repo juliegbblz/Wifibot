@@ -126,7 +126,6 @@ void Wifibot::receive(){
 		crc_recv = ((unsigned char)sbuf[20] << 8) | (unsigned char)sbuf[19];
 		if (crc_calc == crc_recv) {
 			cout<<"CRC valide";
-			memcpy(data_robot, sbuf, 21);
 			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
 			if (speed_left > 32767) speed_left-=65536;
 			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
@@ -138,6 +137,9 @@ void Wifibot::receive(){
 			long odometry_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
+			cout<<"battery"<<battery;
+			memcpy(data_robot, sbuf, 21);
+			cout<<"battery data_robot"<<data_robot[2];
 		}
 		else{
 			cout<<"CRC invalide";
@@ -172,7 +174,7 @@ int Wifibot::getBattery(){
 	int volts=static_cast<int>(bat);
 	cout<< "Niveau batterie"<<volts<<endl;
 
-	return volts;
+	return volts/10;
 }
 
 
