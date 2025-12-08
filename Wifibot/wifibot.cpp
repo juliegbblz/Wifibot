@@ -123,8 +123,9 @@ void Wifibot::receive(){
 	while (!m_stop) {
 		m_socket.receive(sbuf,21);
 		crc_calc = crc16((unsigned char*)sbuf, 19);
-		crc_recv = (sbuf[20] << 8) | sbuf[19];
+		crc_recv = ((unsigned char)sbuf[20] << 8) | (unsigned char)sbuf[19];
 		if (crc_calc == crc_recv) {
+			cout<<"CRC valide";
 			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
 			if (speed_left > 32767) speed_left-=65536;
 			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
