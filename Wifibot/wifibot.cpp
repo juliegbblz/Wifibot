@@ -170,9 +170,8 @@ int Wifibot::getBattery(){
 	char bat = data_robot[2];
 	int bat_level = static_cast<int>(bat);
 	double volts = (bat_level*0.1);
-	int percent = std::min(100,static_cast<int>((volts)-8.0/2.0*100));
-	cout<< "Niveau batterie"<<percent;
-	return percent>=0 ? percent : 0 ;
+	cout<< "Niveau batterie"<<volts<<endl;
+	return volts;
 }
 
 
