@@ -127,7 +127,7 @@ Gui::Gui():
 }
 
 void Gui::update_bat_label(int battery){
-	std::string texte_batterie = std::to_string(battery) + " %";
+	std::string texte_batterie = std::to_string(battery) + " V";
     m_entree_batterie.set_text(texte_batterie);
 }
 
