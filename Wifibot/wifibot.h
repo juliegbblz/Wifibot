@@ -22,6 +22,14 @@ private:
 	std::atomic<bool> m_obstacle;
 	
 
+	double m_x = 0.0;       
+    double m_y = 0.0;          
+    double m_theta = 0.0; 
+
+	long m_prev_tics_left = 0;
+	long m_prev_tics_right = 0;
+	
+
 public:
 	Wifibot();
 	~Wifibot();
@@ -34,6 +42,10 @@ public:
 	void disconnect();
 	int getBattery();
 	float convertVoltage(unsigned char ir);
+	double getX() const;
+    double getY() const;
+    double getTheta() const ;
+	void odometry(long tics_l,long tics_r);
 	
 
 

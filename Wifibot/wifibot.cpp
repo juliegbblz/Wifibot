@@ -158,6 +158,9 @@ void Wifibot::receive(){
 				m_obstacle = false;
 			}
 
+
+			long tics_left =
+        	long tics_right =
 		}
 
 		else{
@@ -208,6 +211,42 @@ float Wifibot::convertVoltage(unsigned char ir){
 	//conversion de la tension en distance
 	float dist = powf((a/voltage),(1.0/b));
 	return dist;
+}
+
+double Wifibot::getX() const { return m_x; }
+double Wifibot::getY() const { return m_y; }
+double Wifibot::getTheta() const { return m_theta; }
+
+void Wifibot::odometry(long tics_left, long tics_right)
+{	
+	const double WHEEL_DIAMETER = 14;  // 14 cm en mètres
+    const double WHEEL_RADIUS = 7;
+    const int TICS_PER_TURN = 336;
+    const double ENTRAXE = 15; 
+
+    long delta_tics_left = tics_left - m_prev_tics_left;
+    long delta_tics_right = tics_right - m_prev_tics_right;
+    
+    // Màj des tics
+    m_prev_tics_left = tics_left;
+    m_prev_tics_right = tics_right;
+    
+    // Convertir les tics en distance 
+    // distance = (tics / TICS_PER_TURN) * π * diametre
+    double perimeter = M_PI * WHEEL_DIAMETER;
+    double distance_left = (delta_tics_left / (double)TICS_PER_TURN) * perimeter;
+    double distance_right = (delta_tics_right / (double)TICS_PER_TURN) * perimeter;
+    
+    // Calcul vitesse lin et angulaire
+    double V = (distance_left + distance_right) / 2.0;  // Vitesse linéaire
+    double delta_theta = (distance_right - distance_left) / (2.0 * L);  // Vitesse angulaire
+    
+    // maj orientation
+    m_theta = m_theta + delta_theta;
+    
+    // maj position
+    m_x = m_x + V * cos(m_theta);
+    m_y = m_y + V * sin(m_theta);
 }
 
 
