@@ -89,7 +89,7 @@ void Wifibot::run(){
 		//cout << "Thread [send] : " << ++cpt << endl;
 
 		if(m_obstacle) {
-			m.order.set_order(0,0);
+			m_order.set_order(0,0);
 		}
 
 		bool speed_ctr=m_order.get_speed_ctr();
