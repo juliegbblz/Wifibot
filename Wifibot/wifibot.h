@@ -31,7 +31,7 @@ public:
 	void connect(std::string ip);
 	void disconnect();
 	int getBattery();
-	float convertVoltage(unsigned char ire);
+	float convertVoltage(unsigned char ir);
 	
 
 
