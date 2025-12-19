@@ -12,20 +12,17 @@ Wifibot::Wifibot():
 	m_p_thread (NULL),
 	m_p_thread_recv (NULL),
 	m_socket(),
-	m_obstacle(false),
-	m_dist_left(1000),
-	m_dist_right(1000)
+	m_obstacle(false)
 {
 }
 
 Wifibot::~Wifibot(){
 	this->disconnect();
-}
+}	
 
 void Wifibot::stop(){
 	m_order.set_order(0,0);
 	cout << "Stop()" << endl;
-	m_order.set_order(-10,-10);
 }
 
 void Wifibot::speed_up(){
@@ -152,9 +149,6 @@ void Wifibot::receive(){
 			float dist_l = convertVoltage(ir_left);
 			std::cout<<endl<<"Distance droite"<<dist_r<<" cm"<<endl;
 			std::cout<<endl<<"Distance gauche"<<dist_l<<" cm"<<endl;
-
-			//m_dist_left  = dist_l;
-			//m_dist_right = dist_r;
 
 			const float OBSTACLE_THRESHOLD = 30.0;
 
