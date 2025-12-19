@@ -138,6 +138,8 @@ void Wifibot::receive(){
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
 			memcpy(data_robot, sbuf, 21);
+			float dist_r = convertVoltage(ir_right);
+			float dist_l = convertVoltage(ir_left);
 		}
 		else{
 			cout<<"CRC invalide";
