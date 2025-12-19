@@ -11,7 +11,10 @@ Wifibot::Wifibot():
 	m_stop(false),
 	m_p_thread (NULL),
 	m_p_thread_recv (NULL),
-	m_socket()
+	m_socket(),
+	m_obstacle(false),
+	m_dist_left(1000),
+	m_dist_right(1000)
 {
 }
 
@@ -84,6 +87,11 @@ void Wifibot::run(){
 	short crc;
 	while (m_stop==false) {
 		//cout << "Thread [send] : " << ++cpt << endl;
+
+		if(m_obstacle) {
+			m.order.set_order(0,0);
+		}
+
 		bool speed_ctr=m_order.get_speed_ctr();
 		bool sens_right=((m_order.get_order_R() >=0) ? true :false);
 		short speed_right=abs(m_order.get_order_R());
@@ -140,7 +148,21 @@ void Wifibot::receive(){
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
+
+			//m_dist_left  = dist_l;
+			//m_dist_right = dist_r;
+
+			const float OBSTACLE_THRESHOLD = 30.0;
+
+			if (dist_l < OBSTACLE_THRESHOLD || dist_r < OBSTACLE_THRESHOLD) {
+				m_obstacle = true;
+				cout << "Obstacle détecté" << endl;
+			} else {
+				m_obstacle = false;
+			}
+
 		}
+
 		else{
 			cout<<"CRC invalide";
 		}
