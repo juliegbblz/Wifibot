@@ -179,7 +179,7 @@ int Wifibot::getBattery(){
 
 float Wifibot::convertVoltage(unsigned char ir){
 	//conversion en tension
-	std::cout<<endl<<"Donnee trame "<<ir<<endl;
+	std::cout<<endl<<"Donnee trame "<< static_cast<int>(ir)<<endl;
 	float voltage = ir/77.5;
 
 	//coeff de notre formule
