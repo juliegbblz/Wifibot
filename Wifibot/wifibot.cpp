@@ -140,8 +140,8 @@ void Wifibot::receive(){
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
 			unsigned char ir_right =(unsigned char)sbuf[11];
-			long odometry_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8);
-			long odometry_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8);
+			long tics_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8)|((long)sbuf[5]<<4);
+			long tics_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8)|((long)sbuf[13]<<4);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
 			memcpy(data_robot, sbuf, 21);
@@ -157,10 +157,6 @@ void Wifibot::receive(){
 			} else {
 				m_obstacle = false;
 			}
-
-
-			long tics_left =
-        	long tics_right =
 		}
 
 		else{
@@ -219,7 +215,7 @@ double Wifibot::getTheta() const { return m_theta; }
 
 void Wifibot::odometry(long tics_left, long tics_right)
 {	
-	const double WHEEL_DIAMETER = 14; 
+	const double WHEEL_DIAMETER = 14;  // 14 cm 
     const double WHEEL_RADIUS = 7;
     const int TICS_PER_TURN = 336;
     const double ENTRAXE = 15; 
@@ -247,10 +243,6 @@ void Wifibot::odometry(long tics_left, long tics_right)
     // maj position
     m_x = m_x + V * cos(m_theta);
     m_y = m_y + V * sin(m_theta);
-
-	cout<<"x : "<<m_x;
-	cout<<"y : "<<m_y;
-	cout<<"theta : "<<m_theta;
 }
 
 
