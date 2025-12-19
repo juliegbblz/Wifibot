@@ -25,6 +25,7 @@ Wifibot::~Wifibot(){
 void Wifibot::stop(){
 	m_order.set_order(0,0);
 	cout << "Stop()" << endl;
+	m_order.set_order(-10,-10);
 }
 
 void Wifibot::speed_up(){
@@ -89,6 +90,7 @@ void Wifibot::run(){
 		//cout << "Thread [send] : " << ++cpt << endl;
 
 		if(m_obstacle) {
+			cout << "Obstacle détecté" << endl;
 			m_order.set_order(0,0);
 		}
 
@@ -148,6 +150,8 @@ void Wifibot::receive(){
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
+			std::cout<<endl<<"Distance droite"<<dist_r<<" cm"<<endl;
+			std::cout<<endl<<"Distance gauche"<<dist_l<<" cm"<<endl;
 
 			//m_dist_left  = dist_l;
 			//m_dist_right = dist_r;
@@ -156,7 +160,6 @@ void Wifibot::receive(){
 
 			if (dist_l < OBSTACLE_THRESHOLD || dist_r < OBSTACLE_THRESHOLD) {
 				m_obstacle = true;
-				cout << "Obstacle détecté" << endl;
 			} else {
 				m_obstacle = false;
 			}
@@ -201,7 +204,7 @@ int Wifibot::getBattery(){
 
 float Wifibot::convertVoltage(unsigned char ir){
 	//conversion en tension
-	std::cout<<endl<<"Donnee trame "<< static_cast<int>(ir)<<endl;
+	//std::cout<<endl<<"Donnee trame "<< static_cast<int>(ir)<<endl;
 	float voltage = ir/77.21;
 
 	//coeff de notre formule
@@ -210,7 +213,6 @@ float Wifibot::convertVoltage(unsigned char ir){
 
 	//conversion de la tension en distance
 	float dist = powf((a/voltage),(1.0/b));
-	std::cout<<endl<<"Distance "<<dist<<" cm"<<endl;
 	return dist;
 }
 
