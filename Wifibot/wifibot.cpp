@@ -219,7 +219,7 @@ double Wifibot::getTheta() const { return m_theta; }
 
 void Wifibot::odometry(long tics_left, long tics_right)
 {	
-	const double WHEEL_DIAMETER = 14;  // 14 cm en mètres
+	const double WHEEL_DIAMETER = 14; 
     const double WHEEL_RADIUS = 7;
     const int TICS_PER_TURN = 336;
     const double ENTRAXE = 15; 
@@ -247,6 +247,10 @@ void Wifibot::odometry(long tics_left, long tics_right)
     // maj position
     m_x = m_x + V * cos(m_theta);
     m_y = m_y + V * sin(m_theta);
+
+	cout<<"x : "<<m_x;
+	cout<<"y : "<<m_y;
+	cout<<"theta : "<<m_theta;
 }
 
 
