@@ -132,7 +132,7 @@ void Wifibot::receive(){
 			if (speed_right > 32767) speed_right-=65536;
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
-			unsigned char ir_right =(unsigned char)sbuf[4];
+			unsigned char ir_right =(unsigned char)sbuf[11];
 			long odometry_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8);
 			long odometry_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8);
 			unsigned char current =(unsigned char)sbuf[17];
