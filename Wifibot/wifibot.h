@@ -20,8 +20,6 @@ private:
 	unsigned char ir_right;
 	char data_robot[21];
 	std::atomic<bool> m_obstacle;
-	float m_dist_left;
-	float m_dist_right;
 	
 
 public:
