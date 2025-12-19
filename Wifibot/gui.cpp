@@ -131,6 +131,11 @@ void Gui::update_bat_label(int battery){
     m_entree_batterie.set_text(texte_batterie);
 }
 
+//void Gui::update_dist_label(float dist){
+//	std::string texte_distance= std:: to_string(dist) + "cm";
+//	m_entree_distance.set_text(texte_distance);
+//}
+
 bool Gui::time_out()
 {
     int bat = m_robot.getBattery();

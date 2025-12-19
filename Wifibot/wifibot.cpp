@@ -175,6 +175,20 @@ int Wifibot::getBattery(){
 	return volts/10;
 }
 
+float Wifibot::convertVoltage(unsigned char ir){
+	//conversion en tension
+	voltage = ir/77.5;
+
+	//coeff de notre formule
+	const float a = 46.385;
+	const float b = 0.926;
+
+	//conversion de la tension en distance
+	float dist = std::powf((a/voltage),(1.0/b));
+	std::cout<<endl<<"Distance "<<dist<<" cm"<<endl;
+	return dist;
+}
+
 
 short Wifibot::crc16(unsigned char* trame, int longueur){
 	unsigned int Crc = 0xFFFF;

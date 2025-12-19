@@ -15,6 +15,8 @@ private:
 	Socket_TCP m_socket;
 	char m_output_buf[9];
 	unsigned char trame_crc[6];
+	unsigned char ir_left;
+	unsigned char ir_right;
 	char data_robot[21];
 	
 
@@ -29,6 +31,7 @@ public:
 	void connect(std::string ip);
 	void disconnect();
 	int getBattery();
+	float convertVoltage(float voltage);
 	
 
 
