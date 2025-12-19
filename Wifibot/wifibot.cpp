@@ -179,14 +179,14 @@ int Wifibot::getBattery(){
 
 float Wifibot::convertVoltage(unsigned char ir){
 	//conversion en tension
-	voltage = ir/77.5;
+	float voltage = ir/77.5;
 
 	//coeff de notre formule
 	const float a = 46.385;
 	const float b = 0.926;
 
 	//conversion de la tension en distance
-	float dist = std::powf((a/voltage),(1.0/b));
+	float dist = powf((a/voltage),(1.0/b));
 	std::cout<<endl<<"Distance "<<dist<<" cm"<<endl;
 	return dist;
 }
