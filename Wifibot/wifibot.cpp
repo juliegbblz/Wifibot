@@ -218,7 +218,9 @@ void Wifibot::odometry(long tics_left, long tics_right)
 	const double WHEEL_DIAMETER = 14;  // 14 cm 
     const double WHEEL_RADIUS = 7;
     const int TICS_PER_TURN = 336;
-    const double ENTRAXE = 15; 
+    const double ENTRAXE = 32;
+	const double L = 16;
+	
 
     long delta_tics_left = tics_left - m_prev_tics_left;
     long delta_tics_right = tics_right - m_prev_tics_right;
