@@ -136,7 +136,7 @@ void Wifibot::receive(){
 		crc_calc = crc16((unsigned char*)sbuf, 19);
 		crc_recv = ((unsigned char)sbuf[20] << 8) | (unsigned char)sbuf[19];
 		if (crc_calc == crc_recv) {
-			cout<<"CRC valide";
+			// cout<<endl<<"CRC valide";
 			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
 			if (speed_left > 32767) speed_left-=65536;
 			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
@@ -152,7 +152,7 @@ void Wifibot::receive(){
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
 
-			std::cout<<endl<<"Wifibot ! "<<endl;
+			std::cout<<endl<<"Wifibot ! "<<endl<<endl;;
 			cout << "tics_left = " << m_tics_left << endl;
 			cout << "tics_right = " << m_tics_right << endl;
 
