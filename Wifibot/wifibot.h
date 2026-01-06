@@ -1,6 +1,7 @@
 #pragma once
 #include <thread>
 #include <atomic>
+#include <cstdint>
 #include "order.h"
 #include "socket.h"
 
@@ -28,10 +29,15 @@ private:
     double m_y = 0.0;          
     double m_theta = 0.0; 
 
-	unsigned long m_prev_tics_left;
-	unsigned long m_prev_tics_right;
-	unsigned long m_tics_left;
-	unsigned long m_tics_right;
+	//unsigned long m_prev_tics_left;
+	//unsigned long m_prev_tics_right;
+	//unsigned long m_tics_left;
+	//unsigned long m_tics_right;
+
+    int32_t m_prev_tics_left = 0;
+    int32_t m_prev_tics_right = 0;
+	int32_t tics_left;
+	int32_t tics_right;
 	
 
 public:
@@ -49,8 +55,9 @@ public:
 	double getX() const;
     double getY() const;
     double getTheta() const ;
-	void odometry(long tics_l,long tics_r);
+	void odometry(int32_t tics_l, int32_t tics_r);
 	void moveDistance(double distance_m);
+	static int32_t readInt32(const uint8_t* buf, int offset);
 	
 
 

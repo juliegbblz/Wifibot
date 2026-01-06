@@ -145,14 +145,14 @@ void Socket_TCP::send(std::string str_data) const {
 	}
 }
 
-void Socket_TCP::receive( char* p_data, int size) {
+void Socket_TCP::receive( uint8_t* p_data, int size) {
 	if(m_p_socket && m_p_address_port) {
 		if(m_p_socket->is_connected() ) {
 			try {
 				Glib::RefPtr<Gio::SocketAddress> p_socket_address = m_p_socket->get_remote_address();
 				// get_local_address()  // adresse locale
 				// get_remote_address() // adresse distante
-				m_p_socket->receive_from(p_socket_address, p_data, size, m_p_cancellable);
+				m_p_socket->receive_from(p_socket_address, reinterpret_cast<char*>(p_data), size, m_p_cancellable);
 			}
 			catch (const Gio::Error &e) {
 				std::cerr << "[ exeption receive() ] Code : " << e.code() 

@@ -121,7 +121,7 @@ void Wifibot::run(){
 		m_output_buf[8] = (crc >> 8) & 0xFF;
 	
 		m_socket.send(m_output_buf,9);
-		odometry(m_tics_left,m_tics_right);
+		//odometry(tics_left,tics_right); 
 	
 		this_thread::sleep_for(std::chrono::milliseconds(LOOP_TIME));
 	}
@@ -130,7 +130,7 @@ void Wifibot::run(){
 
 
 void Wifibot::receive(){
-	char sbuf[21];
+	uint8_t sbuf[21];
 	short crc_calc,crc_recv;
 	while (!m_stop) {
 		m_socket.receive(sbuf,21);

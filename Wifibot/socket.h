@@ -48,7 +48,7 @@ public:
 	void send(const char* p_data, int size) const;
 	void send(std::string str_data) const;
 
-	void receive(char* p_data, int size);
+	void receive(uint8_t* p_data, int size);
 };
 
 #endif // _SOCKET_H_
