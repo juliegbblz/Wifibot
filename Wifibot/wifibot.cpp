@@ -87,7 +87,7 @@ void Wifibot::run(){
 		//cout << "Thread [send] : " << ++cpt << endl;
 
 		if(m_obstacle) {
-			cout << "Obstacle détecté" << endl;
+			cout << "Obstacle détecté !" << endl;
 			m_order.set_order(0,0);
 		}
 
@@ -132,7 +132,7 @@ void Wifibot::receive(){
 		crc_calc = crc16((unsigned char*)sbuf, 19);
 		crc_recv = ((unsigned char)sbuf[20] << 8) | (unsigned char)sbuf[19];
 		if (crc_calc == crc_recv) {
-			cout<<"CRC valide";
+			//cout<<"CRC valide";
 			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
 			if (speed_left > 32767) speed_left-=65536;
 			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
@@ -147,10 +147,12 @@ void Wifibot::receive(){
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
-			std::cout<<endl<<"Distance droite ="<<dist_r<<" cm"<<endl;
-			std::cout<<endl<<"Distance gauche ="<<dist_l<<" cm"<<endl;
 
-			std::cout << "Position du robot :" << std::endl;
+			std::cout<<endl<<"Wifibot ! "<<endl;
+			std::cout<<endl<<"Distance droite = "<<dist_r<<" cm"<<endl;
+			std::cout<<"Distance gauche = "<<dist_l<<" cm"<<endl;
+
+			std::cout <<endl<< "Position du robot :" << std::endl;
    			 std::cout << "x = " << getX()
               	<< ", y = " << getY()
               	<< ", theta = " << getTheta()
@@ -196,7 +198,7 @@ void Wifibot::disconnect(){
 int Wifibot::getBattery(){
 	unsigned char bat = data_robot[2];
 	int volts=static_cast<int>(bat);
-	cout<< "Niveau de la batterie : "<< volts/10 << " V" << endl;
+	cout<<endl<< "Niveau de la batterie : "<< volts/10 << " V" << endl;
 
 	return volts/10;
 }
