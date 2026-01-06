@@ -24,6 +24,24 @@ Wifibot::~Wifibot(){
 	this->disconnect();
 }	
 
+//int32_t Wifibot::readInt32(const uint8_t* buf, int offset)
+//{
+//    return  (int32_t(buf[offset])     << 24) |
+//            (int32_t(buf[offset + 1]) << 16) |
+//            (int32_t(buf[offset + 2]) << 8)  |
+//            (int32_t(buf[offset + 3]));
+//}
+
+int32_t Wifibot::readInt32(const uint8_t* buf, int offset)
+{
+    return int32_t(buf[offset]) |
+           (int32_t(buf[offset+1]) << 8) |
+           (int32_t(buf[offset+2]) << 16) |
+           (int32_t(buf[offset+3]) << 24);
+}
+
+
+
 void Wifibot::stop(){
 	m_order.set_order(0,0);
 	cout << "Stop()" << endl;
@@ -145,8 +163,6 @@ void Wifibot::receive(){
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
 			unsigned char ir_right =(unsigned char)sbuf[11];
-			//m_tics_left = ((unsigned long)sbuf[8]<<24)| ((unsigned long)sbuf[7]<<16)|((unsigned long)sbuf[6]<<8)|((unsigned long)sbuf[5]);
-			//m_tics_right = ((unsigned long)sbuf[16]<<24)| ((unsigned long)sbuf[15]<<16)|((unsigned long)sbuf[14]<<8)|((unsigned long)sbuf[13]);
 			int32_t tics_left  = readInt32(sbuf, 5);
 			int32_t tics_right = readInt32(sbuf, 13);
 			unsigned char current =(unsigned char)sbuf[17];
@@ -154,16 +170,12 @@ void Wifibot::receive(){
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
-
 			std::cout<<endl<<"Wifibot ! "<<endl<<endl;;
 			cout << "tics_left = " << tics_left << endl;
 			cout << "tics_right = " << tics_right << endl;
-
 			std::cout<<endl<<"Distance droite = "<<dist_r<<" cm"<<endl;
 			std::cout<<"Distance gauche = "<<dist_l<<" cm"<<endl;
-
 			odometry(tics_left, tics_right);
-
 			const float OBSTACLE_THRESHOLD = 30.0;
 
 			if (dist_l < OBSTACLE_THRESHOLD || dist_r < OBSTACLE_THRESHOLD) {
@@ -224,13 +236,6 @@ float Wifibot::convertVoltage(unsigned char ir){
 	return dist;
 }
 
-int32_t Wifibot::readInt32(const uint8_t* buf, int offset)
-{
-    return  (int32_t(buf[offset])     << 24) |
-            (int32_t(buf[offset + 1]) << 16) |
-            (int32_t(buf[offset + 2]) << 8)  |
-            (int32_t(buf[offset + 3]));
-}
 
 double Wifibot::getX() const { return m_x; }
 double Wifibot::getY() const { return m_y; }
@@ -281,8 +286,6 @@ void Wifibot::odometry(int32_t tics_left, int32_t tics_right)
               	<< ", y = " << m_y
               	<< ", theta = " << m_theta
               	<< endl;
-
-
 
 }
 
