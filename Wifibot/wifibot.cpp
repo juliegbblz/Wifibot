@@ -147,8 +147,14 @@ void Wifibot::receive(){
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
-			std::cout<<endl<<"Distance droite"<<dist_r<<" cm"<<endl;
-			std::cout<<endl<<"Distance gauche"<<dist_l<<" cm"<<endl;
+			std::cout<<endl<<"Distance droite ="<<dist_r<<" cm"<<endl;
+			std::cout<<endl<<"Distance gauche ="<<dist_l<<" cm"<<endl;
+
+			std::cout << "Position du robot :" << std::endl;
+   			 std::cout << "x = " << getX()
+              	<< ", y = " << getY()
+              	<< ", theta = " << getTheta()
+              	<< std::endl;
 
 			const float OBSTACLE_THRESHOLD = 30.0;
 
@@ -190,7 +196,7 @@ void Wifibot::disconnect(){
 int Wifibot::getBattery(){
 	unsigned char bat = data_robot[2];
 	int volts=static_cast<int>(bat);
-	cout<< "Niveau batterie"<<volts<<endl;
+	cout<< "Niveau de la batterie : "<< volts/10 << " V" << endl;
 
 	return volts/10;
 }
