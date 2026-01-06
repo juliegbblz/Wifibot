@@ -230,10 +230,10 @@ double Wifibot::getTheta() const { return m_theta; }
 
 void Wifibot::odometry(long tics_left, long tics_right)
 {	
-	const double WHEEL_DIAMETER = 14;  // 14 cm 
-    const double WHEEL_RADIUS = 7;
+	const double WHEEL_DIAMETER = 0.14;  // 14 cm 
+    const double WHEEL_RADIUS = 0.07;
     const int TICS_PER_TURN = 336;
-    const double ENTRAXE = 32;
+    const double ENTRAXE = 0.32;
 	const double L = ENTRAXE/2;
 
 	if (!m_odometry_initialized)
