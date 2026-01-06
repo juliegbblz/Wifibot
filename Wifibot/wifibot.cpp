@@ -87,7 +87,7 @@ void Wifibot::run(){
 		//cout << "Thread [send] : " << ++cpt << endl;
 
 		if(m_obstacle) {
-			cout << "Obstacle détecté !" << endl;
+			cout << "Obstacle détecté" << endl;
 			m_order.set_order(0,0);
 		}
 
@@ -132,7 +132,7 @@ void Wifibot::receive(){
 		crc_calc = crc16((unsigned char*)sbuf, 19);
 		crc_recv = ((unsigned char)sbuf[20] << 8) | (unsigned char)sbuf[19];
 		if (crc_calc == crc_recv) {
-			//cout<<"CRC valide";
+			cout<<"CRC valide";
 			short speed_left = (short)((sbuf[1] <<8) | (unsigned char)sbuf[0]);
 			if (speed_left > 32767) speed_left-=65536;
 			short speed_right = (short)((sbuf[10] <<8) | (unsigned char)sbuf[9]);
