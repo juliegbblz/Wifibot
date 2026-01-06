@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <cstdint>
 #include "wifibot.h"
 
 
@@ -144,29 +145,24 @@ void Wifibot::receive(){
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
 			unsigned char ir_right =(unsigned char)sbuf[11];
-			m_tics_left = ((unsigned long)sbuf[8]<<24)| ((unsigned long)sbuf[7]<<16)|((unsigned long)sbuf[6]<<8)|((unsigned long)sbuf[5]);
-			m_tics_right = ((unsigned long)sbuf[16]<<24)| ((unsigned long)sbuf[15]<<16)|((unsigned long)sbuf[14]<<8)|((unsigned long)sbuf[13]);
+			//m_tics_left = ((unsigned long)sbuf[8]<<24)| ((unsigned long)sbuf[7]<<16)|((unsigned long)sbuf[6]<<8)|((unsigned long)sbuf[5]);
+			//m_tics_right = ((unsigned long)sbuf[16]<<24)| ((unsigned long)sbuf[15]<<16)|((unsigned long)sbuf[14]<<8)|((unsigned long)sbuf[13]);
+			int32_t tics_left  = readInt32(sbuf, 5);
+			int32_t tics_right = readInt32(sbuf, 13);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
 
-		
-
-
 			std::cout<<endl<<"Wifibot ! "<<endl<<endl;;
-			cout << "tics_left = " << m_tics_left << endl;
-			cout << "tics_right = " << m_tics_right << endl;
+			cout << "tics_left = " << tics_left << endl;
+			cout << "tics_right = " << tics_right << endl;
 
 			std::cout<<endl<<"Distance droite = "<<dist_r<<" cm"<<endl;
 			std::cout<<"Distance gauche = "<<dist_l<<" cm"<<endl;
 
-			std::cout <<endl<< "Position du robot :" << std::endl;
-   			 std::cout << "x = " << getX()
-              	<< ", y = " << getY()
-              	<< ", theta = " << getTheta()
-              	<< std::endl;
+			odometry(tics_left, tics_right);
 
 			const float OBSTACLE_THRESHOLD = 30.0;
 
@@ -228,11 +224,19 @@ float Wifibot::convertVoltage(unsigned char ir){
 	return dist;
 }
 
+int32_t Wifibot::readInt32(const uint8_t* buf, int offset)
+{
+    return  (int32_t(buf[offset])     << 24) |
+            (int32_t(buf[offset + 1]) << 16) |
+            (int32_t(buf[offset + 2]) << 8)  |
+            (int32_t(buf[offset + 3]));
+}
+
 double Wifibot::getX() const { return m_x; }
 double Wifibot::getY() const { return m_y; }
 double Wifibot::getTheta() const { return m_theta; }
 
-void Wifibot::odometry(long tics_left, long tics_right)
+void Wifibot::odometry(int32_t tics_left, int32_t tics_right)
 {	
 	const double WHEEL_DIAMETER = 0.14;  // 14 cm 
     const double WHEEL_RADIUS = 0.07;
@@ -248,8 +252,9 @@ void Wifibot::odometry(long tics_left, long tics_right)
         return;
     }	
 
-    long delta_tics_left = (long) tics_left - (long) m_prev_tics_left;
-    long delta_tics_right = (long) tics_right - (long) m_prev_tics_right;
+   	int32_t delta_tics_left  = tics_left  - m_prev_tics_left;
+	int32_t delta_tics_right = tics_right - m_prev_tics_right;
+
     
     // Màj des tics
     m_prev_tics_left = tics_left;
@@ -265,12 +270,20 @@ void Wifibot::odometry(long tics_left, long tics_right)
     double V = (distance_left + distance_right) / 2.0;  // Vitesse linéaire
     double delta_theta = (distance_right - distance_left) / (2.0 * L);  // Vitesse angulaire
     
-    // maj orientation
-    m_theta = m_theta + delta_theta;
-    
-    // maj position
-    m_x = m_x + V * cos(m_theta);
-    m_y = m_y + V * sin(m_theta);
+    double theta_mid = m_theta + delta_theta / 2.0;
+
+	m_x += V * cos(theta_mid);
+	m_y += V * sin(theta_mid);
+	m_theta += delta_theta;
+
+	cout <<endl<< "Position du robot :" << endl;
+   			 cout << "x = " << m_x
+              	<< ", y = " << m_y
+              	<< ", theta = " << m_theta
+              	<< endl;
+
+
+
 }
 
 
