@@ -28,12 +28,10 @@ private:
     double m_y = 0.0;          
     double m_theta = 0.0; 
 
-	long m_prev_tics_left;
-	long m_prev_tics_right;
-	unsigned long r_tics_left;
-	unsigned long r_tics_right;
-	long m_tics_left;
-	long m_tics_right;
+	unsigned long m_prev_tics_left;
+	unsigned long m_prev_tics_right;
+	unsigned long m_tics_left;
+	unsigned long m_tics_right;
 	
 
 public:

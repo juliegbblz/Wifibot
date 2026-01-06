@@ -144,19 +144,15 @@ void Wifibot::receive(){
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
 			unsigned char ir_right =(unsigned char)sbuf[11];
-			r_tics_left = ((unsigned long)sbuf[8]<<24)| ((unsigned long)sbuf[7]<<16)|((unsigned long)sbuf[6]<<8)|((unsigned long)sbuf[5]);
-			r_tics_right = ((unsigned long)sbuf[16]<<24)| ((unsigned long)sbuf[15]<<16)|((unsigned long)sbuf[14]<<8)|((unsigned long)sbuf[13]);
+			m_tics_left = ((unsigned long)sbuf[8]<<24)| ((unsigned long)sbuf[7]<<16)|((unsigned long)sbuf[6]<<8)|((unsigned long)sbuf[5]);
+			m_tics_right = ((unsigned long)sbuf[16]<<24)| ((unsigned long)sbuf[15]<<16)|((unsigned long)sbuf[14]<<8)|((unsigned long)sbuf[13]);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
 			memcpy(data_robot, sbuf, 21);
 			float dist_r = convertVoltage(ir_right);
 			float dist_l = convertVoltage(ir_left);
 
-			long tics_right = (long)r_tics_right;
-			long tics_left = (long)r_tics_left;
-
-			m_tics_left=tics_left;
-			m_tics_right=tics_right;
+		
 
 
 			std::cout<<endl<<"Wifibot ! "<<endl<<endl;;
@@ -252,8 +248,8 @@ void Wifibot::odometry(long tics_left, long tics_right)
         return;
     }	
 
-    long delta_tics_left = tics_left - m_prev_tics_left;
-    long delta_tics_right = tics_right - m_prev_tics_right;
+    long delta_tics_left = (long) tics_left - (long) m_prev_tics_left;
+    long delta_tics_right = (long) tics_right - (long) m_prev_tics_right;
     
     // Màj des tics
     m_prev_tics_left = tics_left;
