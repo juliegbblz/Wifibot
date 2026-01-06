@@ -30,6 +30,7 @@ private:
 	Gtk::Button m_bouton_rot_r;
 	Gtk::Entry m_entree_1;
 	Gtk::Entry m_entree_batterie;
+	Gtk::Entry* m_entree_distance;
 	Gtk::Label titre;
 	Gtk::Label fin;
 	
@@ -39,6 +40,8 @@ public:
 	~Gui();
 	void update_bat_label(int battery);
 	bool time_out();
+	void on_button_go_clicked();
+
 
 
 };

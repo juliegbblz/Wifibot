@@ -63,7 +63,7 @@ Gui::Gui():
 	this->set_resizable(false);
 
 
-	m_entree_1.set_text("127.0.0.1");
+	m_entree_1.set_text("192.168.1.106");
 	//m_entree_1.set_alignment(0.5);
 
 	//m_box_1.pack_start(m_box_3);
@@ -84,7 +84,21 @@ Gui::Gui():
 	m_entree_batterie.set_editable(false);
 	
 	m_vbox->add(*m_hbox_2);
-	m_vbox->add(*m_hbox_fin);	
+	m_vbox->add(*m_hbox_fin);
+	m_entree_distance = Gtk::manage(new Gtk::Entry());
+	m_entree_distance->set_text("1.0");          // valeur par défaut en mètres
+	m_entree_distance->set_max_length(5);        // par ex.
+
+	Gtk::Label* label_dist = Gtk::manage(new Gtk::Label("Distance (m):"));
+	m_hbox_fin->pack_start(*label_dist, Gtk::PACK_SHRINK);
+	m_hbox_fin->pack_start(*m_entree_distance, Gtk::PACK_SHRINK);
+	
+	Gtk::Button* m_button_go = Gtk::manage(new Gtk::Button("Go"));
+	m_button_go->signal_clicked().connect(
+    	sigc::mem_fun(*this, &Gui::on_button_go_clicked)
+	);
+	m_hbox_fin->pack_start(*m_button_go, Gtk::PACK_SHRINK);
+
 	
 	this->add(*m_vbox);
 
@@ -142,6 +156,18 @@ bool Gui::time_out()
     update_bat_label(bat);    
     return true;  // Continue le timeout toutes les 400ms
 }
+
+void Gui::on_button_go_clicked()
+{
+    const std::string txt = m_entree_distance->get_text();
+    try {
+        double dist = std::stod(txt);      // distance en mètres
+        m_robot.moveDistance(dist);        // appel vers Wifibot
+	}catch (const std::exception& e) {
+        //erreur
+    }
+}
+
 
 
 

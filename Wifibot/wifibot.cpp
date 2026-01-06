@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <cmath>
+#include <chrono>
 #include "wifibot.h"
 
 
@@ -119,6 +120,7 @@ void Wifibot::run(){
 		m_output_buf[8] = (crc >> 8) & 0xFF;
 	
 		m_socket.send(m_output_buf,9);
+		odometry(m_tics_left,m_tics_right);
 	
 		this_thread::sleep_for(std::chrono::milliseconds(LOOP_TIME));
 	}
@@ -142,8 +144,8 @@ void Wifibot::receive(){
 			unsigned char battery =(unsigned char)sbuf[2];
 			unsigned char ir_left =(unsigned char)sbuf[3];
 			unsigned char ir_right =(unsigned char)sbuf[11];
-			long tics_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8)|((long)sbuf[5]);
-			long tics_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8)|((long)sbuf[13]);
+			m_tics_left = ((long)sbuf[8]<<24)| ((long)sbuf[7]<<16)|((long)sbuf[6]<<8)|((long)sbuf[5]);
+			m_tics_right = ((long)sbuf[16]<<24)| ((long)sbuf[15]<<16)|((long)sbuf[14]<<8)|((long)sbuf[13]);
 			unsigned char current =(unsigned char)sbuf[17];
 			unsigned char firmware_ver =(unsigned char)sbuf[18];
 			memcpy(data_robot, sbuf, 21);
@@ -265,11 +267,27 @@ void Wifibot::odometry(long tics_left, long tics_right)
     // maj position
     m_x = m_x + V * cos(m_theta);
     m_y = m_y + V * sin(m_theta);
-
-	cout<<"x : "<<m_x;
-	cout<<"y : "<<m_y;
-	cout<<"theta : "<<m_theta;
 }
+
+
+
+void Wifibot::moveDistance(double distance_m)
+{
+    m_x = 0.0;
+    m_y = 0.0;
+    m_theta = 0.0;
+    m_order.set_order(10, 10);
+
+    double d = 0.0;
+    while (d < distance_m && !m_stop) {
+        d = std::sqrt(m_x * m_x + m_y * m_y);
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+
+    // arrêt
+    m_order.set_order(0,0);
+}
+
 
 
 short Wifibot::crc16(unsigned char* trame, int longueur){

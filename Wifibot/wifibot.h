@@ -30,6 +30,8 @@ private:
 
 	long m_prev_tics_left = 0;
 	long m_prev_tics_right = 0;
+	long m_tics_left;
+	long m_tics_right;
 	
 
 public:
@@ -48,6 +50,7 @@ public:
     double getY() const;
     double getTheta() const ;
 	void odometry(long tics_l,long tics_r);
+	void moveDistance(double distance_m);
 	
 
 
