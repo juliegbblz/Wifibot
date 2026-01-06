@@ -153,8 +153,8 @@ void Wifibot::receive(){
 			float dist_l = convertVoltage(ir_left);
 
 			std::cout<<endl<<"Wifibot ! "<<endl;
-			cout << "tics_left = " << tics_left << endl;
-			cout << "tics_right = " << tics_right << endl;
+			cout << "tics_left = " << m_tics_left << endl;
+			cout << "tics_right = " << m_tics_right << endl;
 
 			std::cout<<endl<<"Distance droite = "<<dist_r<<" cm"<<endl;
 			std::cout<<"Distance gauche = "<<dist_l<<" cm"<<endl;
