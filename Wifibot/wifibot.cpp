@@ -12,7 +12,9 @@ Wifibot::Wifibot():
 	m_p_thread (NULL),
 	m_p_thread_recv (NULL),
 	m_socket(),
-	m_obstacle(false)
+	m_obstacle(false),
+	m_odometry_initialized(false)
+
 {
 }
 
@@ -149,6 +151,9 @@ void Wifibot::receive(){
 			float dist_l = convertVoltage(ir_left);
 
 			std::cout<<endl<<"Wifibot ! "<<endl;
+			cout << "tics_left = " << tics_left << endl;
+			cout << "tics_right = " << tics_right << endl;
+
 			std::cout<<endl<<"Distance droite = "<<dist_r<<" cm"<<endl;
 			std::cout<<"Distance gauche = "<<dist_l<<" cm"<<endl;
 
@@ -227,8 +232,15 @@ void Wifibot::odometry(long tics_left, long tics_right)
     const double WHEEL_RADIUS = 7;
     const int TICS_PER_TURN = 336;
     const double ENTRAXE = 32;
-	const double L = 16;
-	
+	const double L = ENTRAXE/2;
+
+	if (!m_odometry_initialized)
+    {
+        m_prev_tics_left = tics_left;
+        m_prev_tics_right = tics_right;
+        m_odometry_initialized = true;
+        return;
+    }	
 
     long delta_tics_left = tics_left - m_prev_tics_left;
     long delta_tics_right = tics_right - m_prev_tics_right;

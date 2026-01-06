@@ -20,6 +20,8 @@ private:
 	unsigned char ir_right;
 	char data_robot[21];
 	std::atomic<bool> m_obstacle;
+	bool m_odometry_initialized;
+
 	
 
 	double m_x = 0.0;       
